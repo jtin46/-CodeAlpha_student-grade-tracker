@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en" class="h-full bg-slate-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Grade Tracker</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .font-mono-code {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Custom subtle scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="text-slate-800 min-h-screen flex flex-col bg-slate-50">
+
+    <!-- Top Application Header -->
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-sm">
+            <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 tracking-tight leading-tight">Student Grade Tracker</h1>
+            <p class="text-[10px] text-slate-500 font-medium">Academic Performance Analytics</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-slate-400 font-medium">
+          <span class="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-100 font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Browser Storage Synced
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-6">
+
+      <!-- Performance Statistics Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition hover:shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Class Average</p>
+              <p id="calc-avg" class="text-3xl font-bold text-indigo-600 font-mono-code leading-none py-1">--</p>
+            </div>
+            <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md">
+              <i data-lucide="trending-up" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-2 flex items-center gap-1 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Computed dynamically
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition hover:shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Highest Score</p>
+              <p id="calc-high" class="text-3xl font-bold text-slate-800 font-mono-code leading-none py-1">--</p>
+            </div>
+            <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md">
+              <i data-lucide="award" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <p id="calc-high-student" class="text-[11px] text-indigo-650 mt-2 font-medium truncate">No student yet</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition hover:shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Lowest Score</p>
+              <p id="calc-low" class="text-3xl font-bold text-slate-800 font-mono-code leading-none py-1">--</p>
+            </div>
+            <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md">
+              <i data-lucide="frown" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <p id="calc-low-student" class="text-[11px] text-slate-500 mt-2 font-medium truncate">No student yet</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition hover:shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Students</p>
+              <p id="calc-count" class="text-3xl font-bold text-slate-800 font-mono-code leading-none py-1">--</p>
+            </div>
+            <span class="p-1.5 bg-slate-100 text-slate-600 rounded-md">
+              <i data-lucide="users" class="w-4 h-4"></i>
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2 font-medium">In-memory tracking</p>
+        </div>
+
+      </div>
+
+      <!-- Main Columns Side-by-Side: Form and Table Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Column 1: Record Input Panel (4 Cols) -->
+        <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i data-lucide="user-plus" class="w-4 h-4 text-indigo-600"></i>
+            <span>Add / Edit Student</span>
+          </h3>
+
+          <form id="grade-form" onsubmit="handleFormSubmission(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Student Name</label>
+              <input type="text" id="form-name" required placeholder="Enter student name..." class="w-full bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-lg text-sm outline-none focus:border-indigo-500 focus:bg-white transition" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Grade score (0 - 100)</label>
+              <input type="number" id="form-score" min="0" max="100" step="0.1" required placeholder="e.g. 85.5" class="w-full bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-lg text-sm outline-none focus:border-indigo-500 focus:bg-white transition" />
+            </div>
+
+            <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-lg transition shadow-sm flex items-center justify-center gap-2">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span id="submit-btn-text">Submit Record</span>
+            </button>
+          </form>
+
+          <!-- Utilities Toolbar Panel -->
+          <div class="mt-6 pt-6 border-t border-slate-100 flex gap-2">
+            <button onclick="prepopulateSampleData()" class="flex-1 py-2 border border-slate-200 hover:bg-slate-50 text-slate-650 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Load Preset List</span>
+            </button>
+            <button onclick="clearStudentData()" class="flex-1 py-2 border border-red-200 hover:bg-red-550/10 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Clear List</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Column 2: Dashboard Table and Summary (8 Cols) -->
+        <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+          <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/60">
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">Student Directory</h3>
+              <p class="text-[11px] text-slate-500">Live summary of active students and computed grades</p>
+            </div>
+            <span id="results-count-badge" class="text-xs bg-indigo-50 text-indigo-600 font-semibold px-2.5 py-0.5 rounded-full">--</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50/80 text-slate-400 uppercase text-[9px] tracking-widest font-bold border-b border-slate-200">
+                  <th class="px-6 py-3">ID</th>
+                  <th class="px-6 py-3">Student Name</th>
+                  <th class="px-6 py-3">Score (100)</th>
+                  <th class="px-6 py-3">Letter Grade</th>
+                  <th class="px-6 py-3">Academic Verdict</th>
+                  <th class="px-6 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="student-table-body" class="text-slate-700 font-medium">
+                <!-- Loaded Dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom calculations metadata info -->
+          <div class="p-4 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex justify-between items-center flex-wrap gap-2">
+            <span>Formula standard: <code>average = sum / count</code></span>
+            <span>Click Edit or use the form to update grades</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Class Distribution Visualization Section -->
+      <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <h3 class="text-xs font-bold text-slate-550 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+          <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-600"></i> Grade Score Distribution
+        </h3>
+        <div class="grid grid-cols-5 gap-4 pt-2">
+          <!-- Bar A -->
+          <div class="flex flex-col items-center">
+            <div class="w-full bg-slate-100 rounded-lg h-24 flex items-end overflow-hidden pb-1 justify-center">
+              <div id="bar-A" class="w-8/12 bg-indigo-600 rounded-md transition-all duration-500" style="height: 0%"></div>
+            </div>
+            <p class="font-bold text-slate-800 text-xs mt-2">A</p>
+            <p id="txt-A" class="text-[10px] text-slate-500 font-medium">0 records</p>
+          </div>
+          <!-- Bar B -->
+          <div class="flex flex-col items-center">
+            <div class="w-full bg-slate-100 rounded-lg h-24 flex items-end overflow-hidden pb-1 justify-center">
+              <div id="bar-B" class="w-8/12 bg-indigo-500 rounded-md transition-all duration-500" style="height: 0%"></div>
+            </div>
+            <p class="font-bold text-slate-800 text-xs mt-2">B</p>
+            <p id="txt-B" class="text-[10px] text-slate-500 font-medium">0 records</p>
+          </div>
+          <!-- Bar C -->
+          <div class="flex flex-col items-center">
+            <div class="w-full bg-slate-100 rounded-lg h-24 flex items-end overflow-hidden pb-1 justify-center">
+              <div id="bar-C" class="w-8/12 bg-indigo-400 rounded-md transition-all duration-500" style="height: 0%"></div>
+            </div>
+            <p class="font-bold text-slate-800 text-xs mt-2">C</p>
+            <p id="txt-C" class="text-[10px] text-slate-500 font-medium">0 records</p>
+          </div>
+          <!-- Bar D -->
+          <div class="flex flex-col items-center">
+            <div class="w-full bg-slate-100 rounded-lg h-24 flex items-end overflow-hidden pb-1 justify-center">
+              <div id="bar-D" class="w-8/12 bg-indigo-300 rounded-md transition-all duration-500" style="height: 0%"></div>
+            </div>
+            <p class="font-bold text-slate-800 text-xs mt-2">D</p>
+            <p id="txt-D" class="text-[10px] text-slate-500 font-medium">0 records</p>
+          </div>
+          <!-- Bar F -->
+          <div class="flex flex-col items-center">
+            <div class="w-full bg-slate-100 rounded-lg h-24 flex items-end overflow-hidden pb-1 justify-center">
+              <div id="bar-F" class="w-8/12 bg-indigo-200 rounded-md transition-all duration-500" style="height: 0%"></div>
+            </div>
+            <p class="font-bold text-slate-800 text-xs mt-2">F</p>
+            <p id="txt-F" class="text-[10px] text-slate-500 font-medium">0 records</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+   
+
+    <!-- JS Logic -->
+    <script>
+      let studentDatabase = [];
+
+      window.addEventListener('DOMContentLoaded', () => {
+        // Load initial records from localStorage if present
+        const savedData = localStorage.getItem('grade_tracker_records');
+        if (savedData) {
+          try {
+            studentDatabase = JSON.parse(savedData);
+          } catch (e) {
+            studentDatabase = [];
+          }
+        }
+        
+        // Auto-upgrade check: If old test data contains legacy names, override to Indian names
+        const hasLegacyNames = studentDatabase.some(s => 
+          s.name === "Alice Smith" || s.name === "Bob Miller" || s.name === "Diana Jenkins"
+        );
+
+        // If empty or has old legacy names, populate with new standard Indian ones
+        if (studentDatabase.length === 0 || hasLegacyNames) {
+          studentDatabase = [
+            { name: "Aarav Sharma", score: 88.5 },
+            { name: "Priya Patel", score: 94.0 },
+            { name: "Vivaan Mehta", score: 72.0 },
+            { name: "Diya Iyer", score: 61.5 },
+            { name: "Kabir Singh", score: 95.5 }
+          ];
+          saveToLocalStorage();
+        }
+
+        // Render UI
+        renderUI();
+
+        // Setup Lucide Icons
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      });
+
+      function getLetterGrade(score) {
+        if (score >= 90) return "A";
+        else if (score >= 80) return "B";
+        else if (score >= 70) return "C";
+        else if (score >= 60) return "D";
+        else return "F";
+      }
+
+      function getAcademicLabel(score) {
+        if (score >= 90) return { text: "Excellent", class: "bg-green-105 text-green-700 bg-green-50" };
+        else if (score >= 80) return { text: "Good", class: "bg-blue-105 text-blue-700 bg-blue-50" };
+        else if (score >= 70) return { text: "Average", class: "bg-yellow-101 text-yellow-700 bg-yellow-50" };
+        else if (score >= 60) return { text: "Passing", class: "bg-orange-50 text-orange-700" };
+        else return { text: "Poor", class: "bg-red-100 text-red-700" };
+      }
+
+      function renderUI() {
+        const tbody = document.getElementById('student-table-body');
+        const calcAvg = document.getElementById('calc-avg');
+        const calcHigh = document.getElementById('calc-high');
+        const calcHighStudent = document.getElementById('calc-high-student');
+        const calcLow = document.getElementById('calc-low');
+        const calcLowStudent = document.getElementById('calc-low-student');
+        const calcCount = document.getElementById('calc-count');
+        const countBadge = document.getElementById('results-count-badge');
+
+        if (studentDatabase.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 italic">No students registered. Use the form to insert a record!</td></tr>`;
+          calcAvg.innerText = "--";
+          calcHigh.innerText = "--";
+          calcHighStudent.innerText = "No student enrolled";
+          calcLow.innerText = "--";
+          calcLowStudent.innerText = "No student enrolled";
+          calcCount.innerText = "0";
+          countBadge.innerText = "0 Records";
+
+          updateDistributionBars({ A: 0, B: 0, C: 0, D: 0, F: 0 }, 1);
+          return;
+        }
+
+        let totalSum = 0;
+        let highest = -Infinity;
+        let lowest = Infinity;
+        let bestStudent = null;
+        let worstStudent = null;
+        let gradeCounts = { A: 0, B: 0, C: 0, D: 0, F: 0 };
+
+        let rowsHtml = '';
+        studentDatabase.forEach((student, index) => {
+          totalSum += student.score;
+          
+          if (student.score > highest) {
+            highest = student.score;
+            bestStudent = student;
+          }
+          if (student.score < lowest) {
+            lowest = student.score;
+            worstStudent = student;
+          }
+
+          const letterGrade = getLetterGrade(student.score);
+          gradeCounts[letterGrade]++;
+
+          const labelInfo = getAcademicLabel(student.score);
+
+          rowsHtml += `
+            <tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors">
+              <td class="px-6 py-3.5 text-slate-400 font-mono-code">${index + 1}</td>
+              <td class="px-6 py-3.5 font-semibold text-slate-850">${student.name}</td>
+              <td class="px-6 py-3.5 font-mono-code text-[13px] text-slate-900">${student.score.toFixed(1)}%</td>
+              <td class="px-6 py-3.5"><span class="font-bold text-indigo-600 px-2 py-0.5 bg-indigo-50 rounded">${letterGrade}</span></td>
+              <td class="px-6 py-3.5"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${labelInfo.class}">${labelInfo.text}</span></td>
+              <td class="px-6 py-3.5 text-right flex justify-end gap-1 text-indigo-600">
+                <button onclick="editStudentRecord('${student.name}', ${student.score})" class="bg-indigo-50 text-indigo-650 hover:bg-indigo-100 font-bold px-2 py-1 rounded transition text-[11px] hover:shadow-sm">Edit</button>
+                <button onclick="deleteStudentRecord(${index})" class="bg-red-50 text-rose-650 hover:bg-red-100 font-bold px-2 py-1 rounded transition text-[11px] hover:shadow-sm">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+
+        tbody.innerHTML = rowsHtml;
+
+        const avg = totalSum / studentDatabase.length;
+        calcAvg.innerText = `${avg.toFixed(1)}%`;
+        calcHigh.innerText = `${highest.toFixed(1)}%`;
+        calcHighStudent.innerText = bestStudent ? bestStudent.name : "N/A";
+        calcLow.innerText = `${lowest.toFixed(1)}%`;
+        calcLowStudent.innerText = worstStudent ? worstStudent.name : "N/A";
+        
+        calcCount.innerText = studentDatabase.length;
+        countBadge.innerText = `${studentDatabase.length} Students`;
+
+        updateDistributionBars(gradeCounts, studentDatabase.length);
+      }
+
+      function updateDistributionBars(counts, total) {
+        const letters = ['A', 'B', 'C', 'D', 'F'];
+        letters.forEach(letter => {
+          const count = counts[letter] || 0;
+          const pct = total > 0 ? (count / total) * 100 : 0;
+          const barEl = document.getElementById(`bar-${letter}`);
+          const txtEl = document.getElementById(`txt-${letter}`);
+          
+          if (barEl) {
+            barEl.style.height = `${Math.max(pct, count > 0 ? 5 : 0)}%`;
+          }
+          if (txtEl) {
+            txtEl.innerText = `${count} student${count === 1 ? '' : 's'} (${pct.toFixed(0)}%)`;
+          }
+        });
+      }
+
+      function handleFormSubmission(event) {
+        event.preventDefault();
+        const nameEl = document.getElementById('form-name');
+        const scoreEl = document.getElementById('form-score');
+
+        const name = nameEl.value.trim();
+        const score = parseFloat(scoreEl.value);
+
+        if (!name || isNaN(score) || score < 0 || score > 100) return;
+
+        // Check if student already exists -> if so, update their score. Else insert
+        const existingIndex = studentDatabase.findIndex(s => s.name.toLowerCase() === name.toLowerCase());
+        if (existingIndex !== -1) {
+          studentDatabase[existingIndex].score = score;
+        } else {
+          studentDatabase.push({ name, score });
+        }
+
+        saveToLocalStorage();
+        renderUI();
+
+        // Clear fields
+        nameEl.value = '';
+        scoreEl.value = '';
+        document.getElementById('submit-btn-text').innerText = "Submit Record";
+      }
+
+      function editStudentRecord(name, score) {
+        document.getElementById('form-name').value = name;
+        document.getElementById('form-score').value = score;
+        document.getElementById('submit-btn-text').innerText = "Update Record";
+        document.getElementById('form-name').focus();
+      }
+
+      function deleteStudentRecord(index) {
+        studentDatabase.splice(index, 1);
+        saveToLocalStorage();
+        renderUI();
+      }
+
+      function prepopulateSampleData() {
+        studentDatabase = [
+          { name: "Aarav Sharma", score: 88.5 },
+          { name: "Priya Patel", score: 94.0 },
+          { name: "Vivaan Mehta", score: 72.0 },
+          { name: "Diya Iyer", score: 61.5 },
+          { name: "Kabir Singh", score: 95.5 },
+          { name: "Ananya Rao", score: 85.5 },
+          { name: "Rohan Verma", score: 98.2 },
+          { name: "Isha Gupta", score: 91.0 }
+        ];
+        saveToLocalStorage();
+        renderUI();
+      }
+
+      function clearStudentData() {
+        if (confirm("Are you sure you want to clear the student grade list?")) {
+          studentDatabase = [];
+          saveToLocalStorage();
+          renderUI();
+        }
+      }
+
+      function saveToLocalStorage() {
+        localStorage.setItem('grade_tracker_records', JSON.stringify(studentDatabase));
+      }
+    </script>
+  </body>
+</html>

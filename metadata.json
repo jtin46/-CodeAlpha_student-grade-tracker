@@ -1,0 +1,6 @@
+{
+  "name": "Student Grade Tracker",
+  "description": "An elegant, single-view dashboard to track students, calculate averages, lowest, and highest scores, and display Grade distributions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
