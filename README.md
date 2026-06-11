@@ -15,6 +15,14 @@ This app features dynamic computations, secure in-browser storage, and a respons
 - **Prepopulated Presets**: Quick-load preset student directories featuring realistic demo values with Indian names for faster testing.
 - **Score Distribution Visualizer**: Dynamic visual bar graphs displaying the real-time distribution of letter grades among the class roster.
 
+## Technical Architecture & Java Backend Logic
+
+To complement our interactive web dashboard, this repository includes a standalone companion Java application (**`StudentGradeTracker.java`**). 
+
+The application utilizes clean object-oriented program principles:
+- **`Student` Data Model**: Holds `name` and decimal `score`, with encapsulated getters, setters, and dynamic letter-grade translation logic.
+- **Dynamic ArrayList Engine**: Serves as the key database storage mechanism mirroring the web UI's collection.
+- **Robust Statistics Calculator**: Dynamically iterates the collection to calculate average, highest, lowest scores, and renders a visual ASCII distribution frequency chart
 
 
 ## Getting Started (Local Setup in VS Code)
@@ -46,6 +54,4 @@ npm run dev
 ```
 Once started, the terminal will display a local address (usually `http://localhost:3000`). Ctrl-click or paste this link into your preferred browser to interact with the application.
 
-
-```
 
